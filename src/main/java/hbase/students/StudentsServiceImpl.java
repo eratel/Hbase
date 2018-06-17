@@ -99,11 +99,18 @@ public class StudentsServiceImpl {
         ssi.createStuTable();
         //添加数据
         //列名/值
-        Map<byte[],byte[]> bytes = new HashMap<byte[],byte[]>();
-        bytes.put(CLOUMN1,Bytes.toBytes("Jack"));
-        bytes.put(CLOUMN2,Bytes.toBytes("10"));
-        bytes.put(CLOUMN3,Bytes.toBytes("O:90,T:89,S:100"));
-        ssi.putStuData("cf1",bytes);
+        Map<byte[],byte[]> bytes1 = new HashMap<byte[],byte[]>();
+        bytes1.put(CLOUMN1,Bytes.toBytes("Jack"));
+        bytes1.put(CLOUMN2,Bytes.toBytes("10"));
+        bytes1.put(CLOUMN3,Bytes.toBytes("O:90,T:89,S:100"));
+        //添加列族名称--列族名称,<列名,值>
+        ssi.putStuData("cf1",bytes1);
+
+        Map<byte[],byte[]> bytes2 = new HashMap<byte[],byte[]>();
+        bytes2.put(CLOUMN1,Bytes.toBytes("Jack"));
+        bytes2.put(CLOUMN2,Bytes.toBytes("10"));
+        bytes2.put(CLOUMN3,Bytes.toBytes("O:90,T:89,S:100"));
+        ssi.putStuData("cf2",bytes2);
 
         //查看数据
         Map<byte[],byte[]> byteScans = new HashMap<byte[], byte[]>();
