@@ -5,9 +5,9 @@ import org.apache.hadoop.hbase.client.*;
 
 /**
  * @author Klein
- * @Package base
- * @Description:
- * @date 17/3/18 10:58
+ * @Package hbase.students
+ * @Description: students服务
+ * @date 17/6/18 11:36
  */
 public interface BaseDao {
 

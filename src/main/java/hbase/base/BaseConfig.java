@@ -11,10 +11,10 @@ import org.apache.hadoop.hbase.client.ConnectionFactory;
 import org.junit.Test;
 
 /**
- * @author klein
- * @Package hbase.base
- * @Description:
- * @date 17/3/18 10:59
+ * @author Klein
+ * @Package hbase.students
+ * @Description: students服务
+ * @date 17/6/18 11:36
  */
 public class BaseConfig {
 

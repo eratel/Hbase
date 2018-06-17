@@ -1,5 +1,6 @@
 package hbase.students;
 
+import hbase.Constant.Constant;
 import hbase.base.BaseConfig;
 import hbase.base.BaseDao;
 import hbase.base.BaseDaoImpl;
@@ -21,15 +22,15 @@ import java.util.Map;
  * @date 17/6/18 11:36
  */
 public class StudentsServiceImpl {
-    private BaseDao baseDao = new BaseDaoImpl();
-    private static final String TABLE_NAME = "t_students";
-    private static final String STU_ROW_NAME = "stu_row1";
-    private static final byte[] FAMILY_NAME_1 = Bytes.toBytes("cf1");
-    private static final byte[] FAMILY_NAME_2 = Bytes.toBytes("cf2");
-    private static final byte[] FAMILY_NAME_3 = Bytes.toBytes("cf3");
-    private static final byte[] CLOUMN1 = Bytes.toBytes("cf1");
-    private static final byte[] CLOUMN2 = Bytes.toBytes("cf2");
-    private static final byte[] CLOUMN3 = Bytes.toBytes("cf3");
+    public BaseDao baseDao = new BaseDaoImpl();
+//    public static final String TABLE_NAME = "t_students";
+//    public static final String STU_ROW_NAME = "stu_row1";
+//    public static final byte[] FAMILY_NAME_1 = Bytes.toBytes("cf1");
+//    public static final byte[] FAMILY_NAME_2 = Bytes.toBytes("cf2");
+//    public static final byte[] FAMILY_NAME_3 = Bytes.toBytes("cf3");
+//    public static final byte[] CLOUMN1 = Bytes.toBytes("cf1");
+//    public static final byte[] CLOUMN2 = Bytes.toBytes("cf2");
+//    public static final byte[] CLOUMN3 = Bytes.toBytes("cf3");
 
 
     public void createStuTable() throws Exception{
@@ -41,10 +42,10 @@ public class StudentsServiceImpl {
 //        }
 
         //创建tablename,列族1,2
-        HTableDescriptor tableDescriptor = new HTableDescriptor(TableName.valueOf(TABLE_NAME));
-        HColumnDescriptor columnDescriptor_1 = new HColumnDescriptor(FAMILY_NAME_1);
-        HColumnDescriptor columnDescriptor_2 = new HColumnDescriptor(FAMILY_NAME_2);
-        HColumnDescriptor columnDescriptor_3 = new HColumnDescriptor(FAMILY_NAME_3);
+        HTableDescriptor tableDescriptor = new HTableDescriptor(TableName.valueOf(Constant.TABLE_NAME));
+        HColumnDescriptor columnDescriptor_1 = new HColumnDescriptor(Constant.FAMILY_NAME_1);
+        HColumnDescriptor columnDescriptor_2 = new HColumnDescriptor(Constant.FAMILY_NAME_2);
+        HColumnDescriptor columnDescriptor_3 = new HColumnDescriptor(Constant.FAMILY_NAME_3);
         tableDescriptor.addFamily(columnDescriptor_1);
         tableDescriptor.addFamily(columnDescriptor_2);
         tableDescriptor.addFamily(columnDescriptor_3);
@@ -67,14 +68,14 @@ public class StudentsServiceImpl {
      * @param bytes
      */
     public void putStuData(String familyName,Map<byte[],byte[]> bytes) throws Exception{
-        Put put =  new Put(Bytes.toBytes(STU_ROW_NAME));
+        Put put =  new Put(Bytes.toBytes(Constant.STU_ROW_NAME));
         int i = 1;
         for(byte[] CloumnNames : bytes.keySet()){
             put.addColumn(familyName.getBytes(), CloumnNames, bytes.get(CloumnNames));
             i++;
         }
 
-        baseDao.putData(put, TABLE_NAME);
+        baseDao.putData(put, Constant.TABLE_NAME);
     }
 
     public ResultScanner scanData(Map<byte[],byte[]> bytes) throws Exception{
@@ -83,14 +84,14 @@ public class StudentsServiceImpl {
             scan.addColumn(familyNames, bytes.get(familyNames));
         }
         scan.setCaching(100);
-        ResultScanner results = baseDao.scanData(scan,TABLE_NAME);
+        ResultScanner results = baseDao.scanData(scan,Constant.TABLE_NAME);
 
         return results;
     }
     public void delStuData(String rowId,byte[] familyName,byte[] qualifierName) throws Exception{
         Delete delete = new Delete(Bytes.toBytes(rowId));
         delete.addColumn(familyName, qualifierName);
-        baseDao.delData(delete,TABLE_NAME);
+        baseDao.delData(delete,Constant.TABLE_NAME);
     }
 
     public static void main(String[] args) throws Exception {
@@ -100,16 +101,16 @@ public class StudentsServiceImpl {
         //添加数据
         //列名/值
         Map<byte[],byte[]> bytes1 = new HashMap<byte[],byte[]>();
-        bytes1.put(CLOUMN1,Bytes.toBytes("Jack"));
-        bytes1.put(CLOUMN2,Bytes.toBytes("10"));
-        bytes1.put(CLOUMN3,Bytes.toBytes("O:90,T:89,S:100"));
+        bytes1.put(Constant.CLOUMN1,Bytes.toBytes("Jack"));
+        bytes1.put(Constant.CLOUMN2,Bytes.toBytes("10"));
+        bytes1.put(Constant.CLOUMN3,Bytes.toBytes("O:90,T:89,S:100"));
         //添加列族名称--列族名称,<列名,值>
         ssi.putStuData("cf1",bytes1);
 
         Map<byte[],byte[]> bytes2 = new HashMap<byte[],byte[]>();
-        bytes2.put(CLOUMN1,Bytes.toBytes("Jack"));
-        bytes2.put(CLOUMN2,Bytes.toBytes("10"));
-        bytes2.put(CLOUMN3,Bytes.toBytes("O:90,T:89,S:100"));
+        bytes2.put(Constant.CLOUMN1,Bytes.toBytes("Jack"));
+        bytes2.put(Constant.CLOUMN2,Bytes.toBytes("10"));
+        bytes2.put(Constant.CLOUMN3,Bytes.toBytes("O:90,T:89,S:100"));
         ssi.putStuData("cf2",bytes2);
 
         //查看数据
@@ -121,37 +122,5 @@ public class StudentsServiceImpl {
             }
         }
     }
-
-
-
-    @Test
-    public void testCreateTable() throws Exception {
-        StudentsServiceImpl ssi = new StudentsServiceImpl();
-        ssi.createStuTable();
-    }
-
-    @Test
-    public void testPutDate() throws Exception {
-        StudentsServiceImpl ssi = new StudentsServiceImpl();
-        //添加数据
-        //列名/值
-        Map<byte[],byte[]> bytes = new HashMap<byte[],byte[]>();
-        bytes.put(CLOUMN1,Bytes.toBytes("Jack"));
-        bytes.put(CLOUMN2,Bytes.toBytes("10"));
-        bytes.put(CLOUMN3,Bytes.toBytes("O:90,T:89,S:100"));
-        ssi.putStuData("cf1",bytes);
-    }
-
-    @Test
-    public void testGetDate() throws Exception {
-        BaseDaoImpl baseDao = new BaseDaoImpl();
-        //添加row key
-        Get get = new Get(STU_ROW_NAME.getBytes());
-        //添加列族
-        get.addColumn(STU_ROW_NAME.getBytes(), FAMILY_NAME_1);
-        Result rs = baseDao.getData(get, TABLE_NAME);
-//        Cell cell = rs.getColumnLatestCell(FAMILY_NAME_1,);
-    }
-
 
 }

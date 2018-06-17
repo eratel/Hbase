@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 
 /**
  * @author Klein
- * @Package hbase.base
- * @Description: base服务实现
- * @date 17/3/18 11:11
+ * @Package hbase.students
+ * @Description: students服务
+ * @date 17/6/18 11:36
  */
 public class BaseDaoImpl implements BaseDao {
     static Logger logger = LoggerFactory.getLogger(BaseDaoImpl.class);
