@@ -1,5 +1,6 @@
 package hbase.students;
 
+import hbase.base.BaseConfig;
 import hbase.base.BaseDao;
 import hbase.base.BaseDaoImpl;
 import org.apache.hadoop.hbase.HColumnDescriptor;
@@ -12,10 +13,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author mengfanzhu
+ * @author Klein
  * @Package hbase.students
  * @Description: students服务
- * @date 17/3/16 11:36
+ * @date 17/6/18 11:36
  */
 public class StudentsServiceImpl {
     private BaseDao baseDao = new BaseDaoImpl();
@@ -27,6 +28,13 @@ public class StudentsServiceImpl {
 
 
     public void createStuTable() throws Exception{
+        //判断是否存在 如果存在进行删除
+        Admin admin = BaseConfig.getConnection().getAdmin();
+        if(admin.tableExists(TableName.valueOf(TABLE_NAME))){
+            admin.disableTable(TableName.valueOf(TABLE_NAME));
+            admin.deleteTable(TableName.valueOf(TABLE_NAME));
+        }
+
         //创建tablename,列族1,2
         HTableDescriptor tableDescriptor = new HTableDescriptor(TableName.valueOf(TABLE_NAME));
         HColumnDescriptor columnDescriptor_1 = new HColumnDescriptor(FAMILY_NAME_1);
@@ -35,6 +43,17 @@ public class StudentsServiceImpl {
         tableDescriptor.addFamily(columnDescriptor_1);
         tableDescriptor.addFamily(columnDescriptor_2);
         tableDescriptor.addFamily(columnDescriptor_3);
+        //添加缓存
+        columnDescriptor_1.setBlockCacheEnabled(true);
+        columnDescriptor_2.setBlockCacheEnabled(true);
+        columnDescriptor_3.setBlockCacheEnabled(true);
+        //添加内存
+        columnDescriptor_1.setInMemory(true);
+        columnDescriptor_2.setInMemory(true);
+        columnDescriptor_3.setInMemory(true);
+        //设置最大版本数
+        columnDescriptor_1.setMaxVersions(1);
+
         baseDao.createTable(tableDescriptor);
     }
 
