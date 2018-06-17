@@ -4,10 +4,10 @@ import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.client.*;
 
 /**
- * @author mengfanzhu
+ * @author Klein
  * @Package base
  * @Description:
- * @date 17/3/16 10:58
+ * @date 17/3/18 10:58
  */
 public interface BaseDao {
 

@@ -8,10 +8,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author mengfanzhu
+ * @author Klein
  * @Package hbase.base
  * @Description: base服务实现
- * @date 17/3/16 11:11
+ * @date 17/3/18 11:11
  */
 public class BaseDaoImpl implements BaseDao {
     static Logger logger = LoggerFactory.getLogger(BaseDaoImpl.class);
