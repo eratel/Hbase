@@ -3,11 +3,13 @@ package hbase.students;
 import hbase.base.BaseConfig;
 import hbase.base.BaseDao;
 import hbase.base.BaseDaoImpl;
+import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
+import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,18 +24,21 @@ public class StudentsServiceImpl {
     private BaseDao baseDao = new BaseDaoImpl();
     private static final String TABLE_NAME = "t_students";
     private static final String STU_ROW_NAME = "stu_row1";
-    private static final byte[] FAMILY_NAME_1 = Bytes.toBytes("name");
-    private static final byte[] FAMILY_NAME_2 = Bytes.toBytes("age");
-    private static final byte[] FAMILY_NAME_3 = Bytes.toBytes("scores");
+    private static final byte[] FAMILY_NAME_1 = Bytes.toBytes("cf1");
+    private static final byte[] FAMILY_NAME_2 = Bytes.toBytes("cf2");
+    private static final byte[] FAMILY_NAME_3 = Bytes.toBytes("cf3");
+    private static final byte[] CLOUMN1 = Bytes.toBytes("cf1");
+    private static final byte[] CLOUMN2 = Bytes.toBytes("cf2");
+    private static final byte[] CLOUMN3 = Bytes.toBytes("cf3");
 
 
     public void createStuTable() throws Exception{
         //判断是否存在 如果存在进行删除
-        Admin admin = BaseConfig.getConnection().getAdmin();
-        if(admin.tableExists(TableName.valueOf(TABLE_NAME))){
-            admin.disableTable(TableName.valueOf(TABLE_NAME));
-            admin.deleteTable(TableName.valueOf(TABLE_NAME));
-        }
+//        Admin admin = BaseConfig.getConnection().getAdmin();
+//        if(admin.tableExists(TableName.valueOf(TABLE_NAME))){
+//            admin.disableTable(TableName.valueOf(TABLE_NAME));
+//            admin.deleteTable(TableName.valueOf(TABLE_NAME));
+//        }
 
         //创建tablename,列族1,2
         HTableDescriptor tableDescriptor = new HTableDescriptor(TableName.valueOf(TABLE_NAME));
@@ -58,14 +63,14 @@ public class StudentsServiceImpl {
     }
 
     /**
-     * 插入数据<列族名称，值>
+     * 插入数据  列族名称,<列名,值>
      * @param bytes
      */
-    public void putStuData(Map<byte[],byte[]> bytes) throws Exception{
-        Put put =  new Put(Bytes.toBytes(STU_ROW_NAME));;
+    public void putStuData(String familyName,Map<byte[],byte[]> bytes) throws Exception{
+        Put put =  new Put(Bytes.toBytes(STU_ROW_NAME));
         int i = 1;
-        for(byte[] familyNames : bytes.keySet()){
-            put.addColumn(familyNames, bytes.get(familyNames), Bytes.toBytes(0));
+        for(byte[] CloumnNames : bytes.keySet()){
+            put.addColumn(familyName.getBytes(), CloumnNames, bytes.get(CloumnNames));
             i++;
         }
 
@@ -93,11 +98,12 @@ public class StudentsServiceImpl {
         //创建table
         ssi.createStuTable();
         //添加数据
+        //列名/值
         Map<byte[],byte[]> bytes = new HashMap<byte[],byte[]>();
-        bytes.put(FAMILY_NAME_1,Bytes.toBytes("Jack"));
-        bytes.put(FAMILY_NAME_2,Bytes.toBytes("10"));
-        bytes.put(FAMILY_NAME_3,Bytes.toBytes("O:90,T:89,S:100"));
-        ssi.putStuData(bytes);
+        bytes.put(CLOUMN1,Bytes.toBytes("Jack"));
+        bytes.put(CLOUMN2,Bytes.toBytes("10"));
+        bytes.put(CLOUMN3,Bytes.toBytes("O:90,T:89,S:100"));
+        ssi.putStuData("cf1",bytes);
 
         //查看数据
         Map<byte[],byte[]> byteScans = new HashMap<byte[], byte[]>();
@@ -108,4 +114,37 @@ public class StudentsServiceImpl {
             }
         }
     }
+
+
+
+    @Test
+    public void testCreateTable() throws Exception {
+        StudentsServiceImpl ssi = new StudentsServiceImpl();
+        ssi.createStuTable();
+    }
+
+    @Test
+    public void testPutDate() throws Exception {
+        StudentsServiceImpl ssi = new StudentsServiceImpl();
+        //添加数据
+        //列名/值
+        Map<byte[],byte[]> bytes = new HashMap<byte[],byte[]>();
+        bytes.put(CLOUMN1,Bytes.toBytes("Jack"));
+        bytes.put(CLOUMN2,Bytes.toBytes("10"));
+        bytes.put(CLOUMN3,Bytes.toBytes("O:90,T:89,S:100"));
+        ssi.putStuData("cf1",bytes);
+    }
+
+    @Test
+    public void testGetDate() throws Exception {
+        BaseDaoImpl baseDao = new BaseDaoImpl();
+        //添加row key
+        Get get = new Get(STU_ROW_NAME.getBytes());
+        //添加列族
+        get.addColumn(STU_ROW_NAME.getBytes(), FAMILY_NAME_1);
+        Result rs = baseDao.getData(get, TABLE_NAME);
+//        Cell cell = rs.getColumnLatestCell(FAMILY_NAME_1,);
+    }
+
+
 }
