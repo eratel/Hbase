@@ -29,6 +29,13 @@ public class BaseDaoImpl implements BaseDao {
         }
         admin.close();
     }
+
+
+    /**
+     *  添加列族
+     *  @param tableName
+     *  @param columnDescriptor
+     */
     public void addTableColumn(String tableName,HColumnDescriptor columnDescriptor) throws Exception {
         Admin admin = BaseConfig.getConnection().getAdmin();
         admin.addColumn(TableName.valueOf(tableName),columnDescriptor);
