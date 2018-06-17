@@ -4,11 +4,13 @@ import hbase.Constant.Constant;
 import hbase.base.BaseDaoImpl;
 import hbase.students.StudentsServiceImpl;
 import org.apache.hadoop.hbase.Cell;
+import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.junit.Test;
 
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,11 +46,15 @@ public class App {
         BaseDaoImpl baseDao = new BaseDaoImpl();
         //添加row key
         Get get = new Get(Constant.STU_ROW_NAME.getBytes());
-        //添加列族
+
         get.addColumn(Constant.FAMILY_NAME_1,Constant.CLOUMN1);
+        get.addColumn(Constant.FAMILY_NAME_1,Constant.CLOUMN2);
+        get.addColumn(Constant.FAMILY_NAME_1,Constant.CLOUMN3);
 
         Result rs = baseDao.getData(get, Constant.TABLE_NAME);
+        //查最新的版本
         Cell cell = rs.getColumnLatestCell(Constant.FAMILY_NAME_1,Constant.CLOUMN1);
+        System.out.println(new String(CellUtil.cloneValue(cell),"utf-8"));
 
     }
 }
