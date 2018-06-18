@@ -13,6 +13,7 @@ import org.apache.hadoop.hbase.util.Bytes;
 import org.junit.Test;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -64,11 +65,11 @@ public class StudentsServiceImpl {
     }
 
     /**
-     * 插入数据  列族名称,<列名,值>
+     * 插入数据  rowkey,列族名称,<列名,值>
      * @param bytes
      */
-    public void putStuData(String familyName,Map<byte[],byte[]> bytes) throws Exception{
-        Put put =  new Put(Bytes.toBytes(Constant.STU_ROW_NAME));
+    public void putStuData(String rowKey,String familyName,Map<byte[],byte[]> bytes) throws Exception{
+        Put put =  new Put(Bytes.toBytes(rowKey));
         int i = 1;
         for(byte[] CloumnNames : bytes.keySet()){
             put.addColumn(familyName.getBytes(), CloumnNames, bytes.get(CloumnNames));
@@ -77,6 +78,18 @@ public class StudentsServiceImpl {
 
         baseDao.putData(put, Constant.TABLE_NAME);
     }
+
+    /**
+     *拓展方法
+     *一次性插入多条数据
+     */
+    public void putStuData(List<Put> puts,String tableName) throws Exception {
+        baseDao.putData(puts, tableName);
+    }
+
+
+
+
 
     public ResultScanner scanData(Map<byte[],byte[]> bytes) throws Exception{
         Scan scan = new Scan();
@@ -105,13 +118,13 @@ public class StudentsServiceImpl {
         bytes1.put(Constant.CLOUMN2,Bytes.toBytes("10"));
         bytes1.put(Constant.CLOUMN3,Bytes.toBytes("O:90,T:89,S:100"));
         //添加列族名称--列族名称,<列名,值>
-        ssi.putStuData("cf1",bytes1);
+        ssi.putStuData(Constant.STU_ROW_NAME,"cf1",bytes1);
 
         Map<byte[],byte[]> bytes2 = new HashMap<byte[],byte[]>();
         bytes2.put(Constant.CLOUMN1,Bytes.toBytes("Jack"));
         bytes2.put(Constant.CLOUMN2,Bytes.toBytes("10"));
         bytes2.put(Constant.CLOUMN3,Bytes.toBytes("O:90,T:89,S:100"));
-        ssi.putStuData("cf2",bytes2);
+        ssi.putStuData(Constant.STU_ROW_NAME,"cf2",bytes2);
 
         //查看数据
         Map<byte[],byte[]> byteScans = new HashMap<byte[], byte[]>();
