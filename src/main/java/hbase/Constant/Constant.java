@@ -14,7 +14,7 @@ public interface Constant {
     byte[] FAMILY_NAME_1 = Bytes.toBytes("cf1");
     byte[] FAMILY_NAME_2 = Bytes.toBytes("cf2");
     byte[] FAMILY_NAME_3 = Bytes.toBytes("cf3");
-    byte[] CLOUMN1 = Bytes.toBytes("cf1");
-    byte[] CLOUMN2 = Bytes.toBytes("cf2");
-    byte[] CLOUMN3 = Bytes.toBytes("cf3");
+    byte[] CLOUMN1 = Bytes.toBytes("name");
+    byte[] CLOUMN2 = Bytes.toBytes("age");
+    byte[] CLOUMN3 = Bytes.toBytes("score");
 }

@@ -87,10 +87,12 @@ public class StudentsServiceImpl {
         baseDao.putData(puts, tableName);
     }
 
-
-
-
-
+    /**
+     *查询数据
+     * @param bytes
+     * @return
+     * @throws Exception
+     */
     public ResultScanner scanData(Map<byte[],byte[]> bytes) throws Exception{
         Scan scan = new Scan();
         for(byte[] familyNames : bytes.keySet()){
@@ -135,5 +137,6 @@ public class StudentsServiceImpl {
             }
         }
     }
+
 
 }

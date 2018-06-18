@@ -7,10 +7,10 @@ import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.junit.Test;
 
-import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,7 +38,7 @@ public class App {
         bytes.put(Constant.CLOUMN1, Bytes.toBytes("Jack"));
         bytes.put(Constant.CLOUMN2,Bytes.toBytes("10"));
         bytes.put(Constant.CLOUMN3,Bytes.toBytes("O:90,T:89,S:100"));
-        ssi.putStuData("cf1",bytes);
+        ssi.putStuData(Constant.TABLE_NAME,"cf1",bytes);
     }
 
     @Test
@@ -58,11 +58,18 @@ public class App {
 
     }
 
-    /**
-     * 插入数据 排序
-     */
-    public void descDate(){
 
+    @Test
+    public void scanDate() throws Exception {
+        StudentsServiceImpl studentsService = new StudentsServiceImpl();
+        Map<byte[],byte[]> bytes = new HashMap<byte[],byte[]>();
+        bytes.put(Constant.FAMILY_NAME_1,Constant.CLOUMN1);
+        ResultScanner results = studentsService.scanData(bytes);
+        for (Result result : results) {
+            while (result.advance()) {
+                System.out.println(result.getColumnCells(Constant.FAMILY_NAME_1,Constant.CLOUMN1));
+            }
+        }
     }
 
 }
