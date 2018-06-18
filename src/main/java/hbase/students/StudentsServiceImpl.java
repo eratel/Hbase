@@ -123,9 +123,9 @@ public class StudentsServiceImpl {
         ssi.putStuData(Constant.STU_ROW_NAME,"cf1",bytes1);
 
         Map<byte[],byte[]> bytes2 = new HashMap<byte[],byte[]>();
-        bytes2.put(Constant.CLOUMN1,Bytes.toBytes("Jack"));
-        bytes2.put(Constant.CLOUMN2,Bytes.toBytes("10"));
-        bytes2.put(Constant.CLOUMN3,Bytes.toBytes("O:90,T:89,S:100"));
+        bytes2.put(Constant.CLOUMN1,Bytes.toBytes("Jack2"));
+        bytes2.put(Constant.CLOUMN2,Bytes.toBytes("102"));
+        bytes2.put(Constant.CLOUMN3,Bytes.toBytes("O:90,T:89,S:1002"));
         ssi.putStuData(Constant.STU_ROW_NAME,"cf2",bytes2);
 
         //查看数据
