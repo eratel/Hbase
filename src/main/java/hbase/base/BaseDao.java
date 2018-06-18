@@ -3,6 +3,8 @@ package hbase.base;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.client.*;
 
+import java.util.List;
+
 /**
  * @author Klein
  * @Package hbase.students
@@ -23,6 +25,13 @@ public interface BaseDao {
      *  @param tableName
      */
     public void putData(Put putData,String tableName) throws Exception;
+
+    /**
+     *  新增数据
+     * @param putList
+     *  @param tableName
+     */
+    public void putData(List<Put> putList, String tableName) throws Exception;
 
     /**
      * 删除数据

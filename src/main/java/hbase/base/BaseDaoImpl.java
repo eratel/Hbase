@@ -7,6 +7,8 @@ import org.apache.hadoop.hbase.client.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 /**
  * @author Klein
  * @Package hbase.students
@@ -51,6 +53,16 @@ public class BaseDaoImpl implements BaseDao {
     public void putData(Put putData,String tableName) throws Exception{
         Table table = BaseConfig.getConnection().getTable(TableName.valueOf(tableName));
         table.put(putData);
+        table.close();
+    }
+
+    /**
+     *  新增数据
+     * @param putList
+     */
+    public void putData(List<Put> putList,String tableName) throws Exception{
+        Table table = BaseConfig.getConnection().getTable(TableName.valueOf(tableName));
+        table.put(putList);
         table.close();
     }
 
