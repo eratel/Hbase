@@ -4,10 +4,7 @@ import hbase.Constant.Constant;
 import hbase.base.BaseConfig;
 import hbase.base.BaseDao;
 import hbase.base.BaseDaoImpl;
-import org.apache.hadoop.hbase.Cell;
-import org.apache.hadoop.hbase.HColumnDescriptor;
-import org.apache.hadoop.hbase.HTableDescriptor;
-import org.apache.hadoop.hbase.TableName;
+import org.apache.hadoop.hbase.*;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.junit.Test;
@@ -133,7 +130,8 @@ public class StudentsServiceImpl {
         ResultScanner results = ssi.scanData(byteScans);
         for (Result result : results) {
             while (result.advance()) {
-                System.out.println(result.current());
+                System.out.println(new String(CellUtil.cloneValue(result.getColumnLatestCell(Constant.FAMILY_NAME_1,Constant.CLOUMN1))));
+
             }
         }
     }

@@ -67,7 +67,7 @@ public class App {
         ResultScanner results = studentsService.scanData(bytes);
         for (Result result : results) {
             while (result.advance()) {
-                System.out.println(result.getColumnCells(Constant.FAMILY_NAME_1,Constant.CLOUMN1));
+                System.out.println(new String(CellUtil.cloneValue(result.getColumnLatestCell(Constant.FAMILY_NAME_1,Constant.CLOUMN1))));
             }
         }
     }
